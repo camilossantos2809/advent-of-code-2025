@@ -1,7 +1,10 @@
 package main
 
 import (
+	"bufio"
+	"fmt"
 	"log"
+	"os"
 	"strconv"
 )
 
@@ -30,5 +33,19 @@ func countZero(rotations []string) (int, int) {
 }
 
 func main() {
+	readFile, err := os.Open("2025/day1/input.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer readFile.Close()
 
+	fileScanner := bufio.NewScanner(readFile)
+	fileScanner.Split(bufio.ScanLines)
+	var fileLines []string
+	for fileScanner.Scan() {
+		fileLines = append(fileLines, fileScanner.Text())
+	}
+	current, zeroCount := countZero(fileLines)
+	fmt.Println(current)
+	fmt.Println(zeroCount)
 }
