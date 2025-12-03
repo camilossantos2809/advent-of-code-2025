@@ -19,15 +19,16 @@ func calculateDial(current int, rotation string) int {
 
 func countZero(rotations []string) (int, int) {
 	current := 50
-	zero_count := 0
+	zeroCount := 0
 	for _, rotation := range rotations {
 		current = calculateDial(current, rotation)
 		if current == 0 {
-			zero_count++
+			zeroCount++
 		}
 	}
-	return current, zero_count
+	return current, zeroCount
 }
 
 func main() {
+
 }
