@@ -4,32 +4,74 @@ import (
 	"bufio"
 	"fmt"
 	"log"
+	"math"
+
 	"os"
 	"strconv"
 )
 
-func calculateDial(current int, rotation string) int {
+const startDial = 50
+
+type CalculateDialResult struct {
+	current  int
+	rotation int
+	diff     int
+}
+
+func calculateDial(current int, rotation string) CalculateDialResult {
 	rotationInt, err := strconv.Atoi(rotation[1:])
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	var diff int
 	if rotation[0] == 'L' {
-		return ((current-rotationInt)%100 + 100) % 100
+		diff = current - rotationInt
+	} else {
+		diff = current + rotationInt
 	}
-	return ((current+rotationInt)%100 + 100) % 100
+
+	return CalculateDialResult{
+		current:  ((diff)%100 + 100) % 100,
+		rotation: rotationInt,
+		diff:     diff,
+	}
 }
 
-func countZero(rotations []string) (int, int) {
-	current := 50
+func countZerosAtTheEndOfRotation(rotations []string) (int, int) {
+	current := startDial
 	zeroCount := 0
 	for _, rotation := range rotations {
-		current = calculateDial(current, rotation)
-		if current == 0 {
+		result := calculateDial(current, rotation)
+		current = result.current
+		if result.current == 0 {
 			zeroCount++
 		}
 	}
 	return current, zeroCount
+}
+
+func countZerosForAnyClick(rotations []string) int {
+	current := startDial
+	zeroCount := 0
+	for _, rotation := range rotations {
+		result := calculateDial(current, rotation)
+		current = result.current
+
+		absDiff := math.Abs(float64(result.rotation))
+		if absDiff != 0 {
+			division := absDiff / 100
+			if division > 1 {
+				zeroCount += int(division)
+			} else if result.diff < 0 || result.diff > 99 {
+				zeroCount++
+			}
+			fmt.Println(rotation, zeroCount, division)
+		}
+
+	}
+
+	return zeroCount
 }
 
 func main() {
@@ -45,7 +87,9 @@ func main() {
 	for fileScanner.Scan() {
 		fileLines = append(fileLines, fileScanner.Text())
 	}
-	current, zeroCount := countZero(fileLines)
-	fmt.Println(current)
-	fmt.Println(zeroCount)
+	// _, zeroCount := countZerosAtTheEndOfRotation(fileLines)
+	// fmt.Println("Part 1", zeroCount)
+
+	zeroCount2 := countZerosForAnyClick(fileLines)
+	fmt.Println("Part 2", zeroCount2)
 }
