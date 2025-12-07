@@ -13,9 +13,9 @@ import (
 const startDial = 50
 
 type CalculateDialResult struct {
-	current  int
-	rotation int
-	diff     int
+	newPosition int
+	rotation    int
+	diff        int
 }
 
 func calculateDial(current int, rotation string) CalculateDialResult {
@@ -32,9 +32,9 @@ func calculateDial(current int, rotation string) CalculateDialResult {
 	}
 
 	return CalculateDialResult{
-		current:  ((diff)%100 + 100) % 100,
-		rotation: rotationInt,
-		diff:     diff,
+		newPosition: ((diff)%100 + 100) % 100,
+		rotation:    rotationInt,
+		diff:        diff,
 	}
 }
 
@@ -43,8 +43,8 @@ func countZerosAtTheEndOfRotation(rotations []string) (int, int) {
 	zeroCount := 0
 	for _, rotation := range rotations {
 		result := calculateDial(current, rotation)
-		current = result.current
-		if result.current == 0 {
+		current = result.newPosition
+		if result.newPosition == 0 {
 			zeroCount++
 		}
 	}
@@ -56,19 +56,15 @@ func countZerosForAnyClick(rotations []string) int {
 	zeroCount := 0
 	for _, rotation := range rotations {
 		result := calculateDial(current, rotation)
-		current = result.current
-
-		absDiff := math.Abs(float64(result.rotation))
-		if absDiff != 0 {
-			division := absDiff / 100
-			if division > 1 {
-				zeroCount += int(division)
-			} else if result.diff < 0 || result.diff > 99 {
-				zeroCount++
-			}
-			fmt.Println(rotation, zeroCount, division)
+		var rotationZeroCount float64
+		if result.diff > current {
+			rotationZeroCount = math.Floor(float64(result.diff)/100) - math.Floor(float64(current)/100)
+		} else {
+			rotationZeroCount = math.Floor(float64((result.diff-1))/100) - math.Floor(float64((current-1))/100)
 		}
-
+		rotationZeroCountInt := int(math.Abs(rotationZeroCount))
+		zeroCount += rotationZeroCountInt
+		current = result.newPosition
 	}
 
 	return zeroCount

@@ -42,8 +42,8 @@ func TestCalculateDial(test *testing.T) {
 	for _, _case := range cases {
 		test.Run("Deve gerar o resultado da rotação correto", func(test *testing.T) {
 			result := calculateDial(_case.initial, _case.rotation)
-			if result.current != _case.expected {
-				test.Errorf("Expected %d, result %d", _case.expected, result.current)
+			if result.newPosition != _case.expected {
+				test.Errorf("Expected %d, result %d", _case.expected, result.newPosition)
 			}
 		})
 	}
@@ -88,5 +88,79 @@ func TestPart2(test *testing.T) {
 				test.Errorf("zeroCount = %d; expected 22", zeroCount)
 			}
 		})
+	})
+	test.Run("Deve contar corretamente quando começar perto do zero e rotacionar muito", func(test *testing.T) {
+		// Starting at 50, rotating R150 should cross 0 twice:
+		// 50 -> 100 (crosses 0 once) -> 200 (crosses 0 again, lands at 0)
+		zeroCount := countZerosForAnyClick([]string{"R150"})
+		if zeroCount != 2 {
+			test.Errorf("zeroCount = %d; expected 2", zeroCount)
+		}
+	})
+	test.Run("Rotação pequena que não passa pelo zero", func(test *testing.T) {
+		// Starting at 50, R30 -> ends at 80, never crosses 0
+		zeroCount := countZerosForAnyClick([]string{"R30"})
+		if zeroCount != 0 {
+			test.Errorf("zeroCount = %d; expected 0", zeroCount)
+		}
+	})
+	test.Run("Começando em 99 e rotacionando R1", func(test *testing.T) {
+		// 99 + 1 = 100 -> crosses once, lands at 0
+		// Need to set current to 99 first
+		zeroCount := countZerosForAnyClick([]string{"R49", "R1"}) // 50->99, then 99->0
+		if zeroCount != 1 {
+			test.Errorf("zeroCount = %d; expected 1", zeroCount)
+		}
+	})
+	test.Run("Rotação exata de 100 a partir de posição 0", func(test *testing.T) {
+		zeroCount := countZerosForAnyClick([]string{"L50", "R100"})
+		if zeroCount != 2 {
+			test.Errorf("zeroCount = %d; expected 2", zeroCount)
+		}
+	})
+	test.Run("Rotação de 99 que não cruza zero", func(test *testing.T) {
+		// Starting at 1, R99 -> ends at 0, crosses once
+		zeroCount := countZerosForAnyClick([]string{"L49", "R99"}) // 50->1, then 1->0 (crosses at 100)
+		if zeroCount != 1 {
+			test.Errorf("zeroCount = %d; expected 1", zeroCount)
+		}
+	})
+	test.Run("Rotação pequena para esquerda que cruza", func(test *testing.T) {
+		// Starting at 0, L1 -> crosses once, ends at 99
+		zeroCount := countZerosForAnyClick([]string{"L50", "L1"}) // 50->0, then 0->99
+		if zeroCount != 1 {
+			test.Errorf("zeroCount = %d; expected 1", zeroCount)
+		}
+	})
+	test.Run("Começando em 99 e rotacionando muito para direita", func(test *testing.T) {
+		// Starting at 99, R201 goes to position 300
+		// Crosses: 100 (1st), 200 (2nd), 300 (3rd) = 3 times
+		zeroCount := countZerosForAnyClick([]string{"R49", "R201"}) // 50->99, then 99->300
+		if zeroCount != 3 {
+			test.Errorf("zeroCount = %d; expected 3", zeroCount)
+		}
+	})
+	test.Run("Começando em 1 e rotacionando L2", func(test *testing.T) {
+		// Starting at 1, L2 goes to -1 (wraps to 99)
+		// Crosses 0 once going backward
+		zeroCount := countZerosForAnyClick([]string{"L49", "L2"}) // 50->1, then 1->99
+		if zeroCount != 1 {
+			test.Errorf("zeroCount = %d; expected 1", zeroCount)
+		}
+	})
+	test.Run("Debug: position 99, R201", func(test *testing.T) {
+		// 99 -> 300 should cross at 100, 200, 300 = 3 times
+		zeroCount := countZerosForAnyClick([]string{"R49", "R201"})
+		if zeroCount != 3 {
+			test.Errorf("zeroCount = %d; expected 3", zeroCount)
+		}
+	})
+	test.Run("Começando próximo ao zero indo para esquerda com rotação grande", func(test *testing.T) {
+		// Starting at 5, L205 goes to -200
+		// Crosses: 0 (1st), -100/0 (2nd), -200/0 (3rd) = 3 times
+		zeroCount := countZerosForAnyClick([]string{"L45", "L205"}) // 50->5, then 5->-200
+		if zeroCount != 3 {
+			test.Errorf("zeroCount = %d; expected 3", zeroCount)
+		}
 	})
 }
