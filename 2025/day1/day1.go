@@ -1,4 +1,4 @@
-package main
+package day1
 
 import (
 	"advent-of-code/helpers"
@@ -69,7 +69,7 @@ func countZerosForAnyClick(rotations []string) int {
 	return zeroCount
 }
 
-func main() {
+func Run() {
 	fileLines := helpers.ReadInput("2025/day1/input.txt")
 
 	_, zeroCount := countZerosAtTheEndOfRotation(fileLines)

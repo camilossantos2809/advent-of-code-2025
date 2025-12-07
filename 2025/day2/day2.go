@@ -1,8 +1,11 @@
-package main
+package day2
 
-import "advent-of-code/helpers"
+import (
+	"advent-of-code/helpers"
+	"fmt"
+)
 
-func main() {
-	helpers.ReadInput("2025/day2/input.txt")
-
+func Run() {
+	lines := helpers.ReadInput("2025/day2/input.txt")
+	fmt.Println(lines)
 }
