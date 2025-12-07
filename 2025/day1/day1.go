@@ -1,12 +1,11 @@
 package main
 
 import (
-	"bufio"
+	"advent-of-code/helpers"
 	"fmt"
 	"log"
 	"math"
 
-	"os"
 	"strconv"
 )
 
@@ -71,20 +70,10 @@ func countZerosForAnyClick(rotations []string) int {
 }
 
 func main() {
-	readFile, err := os.Open("2025/day1/input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer readFile.Close()
+	fileLines := helpers.ReadInput("2025/day1/input.txt")
 
-	fileScanner := bufio.NewScanner(readFile)
-	fileScanner.Split(bufio.ScanLines)
-	var fileLines []string
-	for fileScanner.Scan() {
-		fileLines = append(fileLines, fileScanner.Text())
-	}
-	// _, zeroCount := countZerosAtTheEndOfRotation(fileLines)
-	// fmt.Println("Part 1", zeroCount)
+	_, zeroCount := countZerosAtTheEndOfRotation(fileLines)
+	fmt.Println("Part 1", zeroCount)
 
 	zeroCount2 := countZerosForAnyClick(fileLines)
 	fmt.Println("Part 2", zeroCount2)
