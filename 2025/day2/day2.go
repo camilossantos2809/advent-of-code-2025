@@ -21,13 +21,14 @@ func sumInvalidIDs(lines []string) int {
 			end, err := strconv.Atoi(idRange[1])
 			if err != nil {
 				fmt.Printf("Failed to convert start position: %s", idRange[1])
+				break
 			}
 
 			for id := start; id <= end; id++ {
-				strId := fmt.Sprint(id)
-				strLenght := len(strId)
-				first := strId[:strLenght/2]
-				second := strId[strLenght/2:]
+				strId := strconv.Itoa(id)
+				strLength := len(strId)
+				first := strId[:strLength/2]
+				second := strId[strLength/2:]
 				if first == second {
 					invalidIdSum += id
 				}
