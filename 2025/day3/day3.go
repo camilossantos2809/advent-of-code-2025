@@ -13,36 +13,28 @@ type Joltage struct {
 	valueStr string
 }
 
-func findMaxNumbers(line string) (first Joltage, second Joltage) {
+func findMaxNumbers(line string) (first, second Joltage) {
 	var previousFirst Joltage
 	lineLength := len(line)
 	for charIndex := 0; charIndex < lineLength; charIndex++ {
 		digit := int(line[charIndex] - '0')
 		if first.value < digit {
 			previousFirst = first
-
-			first.value = digit
-			first.valueStr = string(line[charIndex])
-			first.index = charIndex
-
+			first = Joltage{value: digit, valueStr: string(line[charIndex]), index: charIndex}
 			if charIndex == lineLength-1 {
 				second = previousFirst
 			} else {
-				second.index = 0
-				second.value = 0
-				second.valueStr = ""
+				second = Joltage{}
 			}
 			continue
 		}
 
 		if second.value < digit {
-			second.value = digit
-			second.valueStr = string(line[charIndex])
-			second.index = charIndex
+			second = Joltage{value: digit, valueStr: string(line[charIndex]), index: charIndex}
 		}
 	}
 
-	return first, second
+	return
 }
 
 func sumLargestJoltages(lines []string) int {
@@ -70,7 +62,7 @@ func Run() {
 	lines := helpers.ReadInput("2025/day3/input.txt")
 
 	part1 := sumLargestJoltages(lines)
-	fmt.Println("Part 1", part1)
+	fmt.Println("Part 1", part1) // 17107
 
 	// part2 := sumInvalidIDsPart2(lines)
 	// fmt.Println("Part 2", part2)
