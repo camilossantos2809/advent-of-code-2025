@@ -51,3 +51,22 @@ func TestFindMaxNumbers(test *testing.T) {
 		}
 	})
 }
+
+func TestFindMaxKDigits(test *testing.T) {
+	tests := []struct {
+		name     string
+		line     string
+		expected string
+	}{
+		{name: "Primeira linha do exemplo", line: "987654321111111", expected: "987654321111"},
+		{name: "Segunda linha do exemplo", line: "811111111111119", expected: "811111111119"},
+		{name: "Terceira linha do exemplo", line: "234234234234278", expected: "434234234278"},
+		{name: "Quarta linha do exemplo", line: "818181911112111", expected: "888911112111"},
+	}
+	for _, tc := range tests {
+		result := findMaxKDigits(tc.line, 12)
+		if result != tc.expected {
+			test.Errorf("expected %s; result %s", tc.expected, result)
+		}
+	}
+}
