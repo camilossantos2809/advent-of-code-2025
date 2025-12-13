@@ -4,6 +4,7 @@ import (
 	"advent-of-code/2025/day1"
 	"advent-of-code/2025/day2"
 	"advent-of-code/2025/day3"
+	"advent-of-code/2025/day4"
 	"fmt"
 	"os"
 )
@@ -12,6 +13,7 @@ var puzzles = map[string]func(){
 	"2025day1": day1.Run,
 	"2025day2": day2.Run,
 	"2025day3": day3.Run,
+	"2025day4": day4.Run,
 }
 
 // Exemplo de usos pelo terminal:
