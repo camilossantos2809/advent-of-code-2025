@@ -56,12 +56,39 @@ func (grid Grid) countAccessibleRolls() int {
 	return count
 }
 
+func (grid Grid) countAccessibleRollsAndRemove() int {
+	var count int
+	var iterationCount int
+
+	for {
+		iterationCount = 0
+		for row, line := range grid.lines {
+			for col, char := range line {
+				if char == '@' {
+					countNeighbor := grid.countNeighborRolls(row, col)
+					if countNeighbor < 4 {
+						count++
+						iterationCount++
+						grid.lines[row][col] = '.'
+					}
+				}
+			}
+		}
+
+		if iterationCount == 0 {
+			break
+		}
+	}
+
+	return count
+}
+
 func Run() {
 	lines := helpers.ReadInput("2025/day4/input.txt")
 
 	part1 := Grid{}.newGrid(lines).countAccessibleRolls()
 	fmt.Println("Part 1", part1) // 1491
 
-	// part2 := sumJoltagesPart2(lines)
-	// fmt.Println("Part 2", part2) // 169349762274117
+	part2 := Grid{}.newGrid(lines).countAccessibleRollsAndRemove()
+	fmt.Println("Part 2", part2) // 8722
 }

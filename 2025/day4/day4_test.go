@@ -19,7 +19,29 @@ func TestPart1(test *testing.T) {
 		result := Grid{}.newGrid(lines).countAccessibleRolls()
 		expected := 13
 		if result != expected {
-			test.Errorf("sumInvalidIDs = %d; expected %d", result, expected)
+			test.Errorf("result = %d; expected %d", result, expected)
+		}
+	})
+}
+
+func TestPart2(test *testing.T) {
+	test.Run("Deve retornar o valor correto para o exemplo fornecido no site", func(test *testing.T) {
+		lines := []string{
+			"..@@.@@@@.",
+			"@@@.@.@.@@",
+			"@@@@@.@.@@",
+			"@.@@@@..@.",
+			"@@.@@@@.@@",
+			".@@@@@@@.@",
+			".@.@.@.@@@",
+			"@.@@@.@@@@",
+			".@@@@@@@@.",
+			"@.@.@@@.@.",
+		}
+		result := Grid{}.newGrid(lines).countAccessibleRollsAndRemove()
+		expected := 43
+		if result != expected {
+			test.Errorf("result = %d; expected %d", result, expected)
 		}
 	})
 }
