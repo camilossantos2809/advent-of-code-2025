@@ -6,7 +6,16 @@ import (
 )
 
 type Grid struct {
-	lines []string
+	lines [][]byte
+}
+
+func (grid Grid) newGrid(lines []string) Grid {
+	grid.lines = make([][]byte, len(lines))
+	for i, line := range lines {
+		grid.lines[i] = []byte(line)
+	}
+
+	return grid
 }
 
 func (grid Grid) isInBounds(row, col int) bool {
@@ -50,7 +59,7 @@ func (grid Grid) countAccessibleRolls() int {
 func Run() {
 	lines := helpers.ReadInput("2025/day4/input.txt")
 
-	part1 := Grid{lines}.countAccessibleRolls()
+	part1 := Grid{}.newGrid(lines).countAccessibleRolls()
 	fmt.Println("Part 1", part1) // 1491
 
 	// part2 := sumJoltagesPart2(lines)
