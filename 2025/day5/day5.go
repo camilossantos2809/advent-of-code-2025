@@ -4,6 +4,7 @@ import (
 	"advent-of-code/helpers"
 	"fmt"
 	"log"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -81,9 +82,50 @@ func countFreshIngredients(lines []string) int {
 	return freshCount
 }
 
+func mergeRanges(ranges []Range) []Range {
+	slices.SortFunc(ranges, func(a, b Range) int {
+		return a.start - b.start
+	})
+
+	var merged []Range
+	for i, r := range ranges {
+		if i == 0 {
+			merged = append(merged, r)
+			continue
+		}
+
+		lastMerged := &merged[len(merged)-1]
+		if lastMerged.end >= r.start {
+			lastMerged.end = max(lastMerged.end, r.end)
+		} else {
+			merged = append(merged, r)
+		}
+	}
+
+	return merged
+}
+
+func countFreshIngredientsRanges(lines []string) int {
+	ranges, _, err := parseRanges(lines)
+	if err != nil {
+		log.Fatal("Failed to parse ranges")
+	}
+	merged := mergeRanges(ranges)
+
+	count := 0
+	for _, r := range merged {
+		count += (r.end - r.start) + 1
+	}
+
+	return count
+}
+
 func Run() {
 	lines := helpers.ReadInput("2025/day5/input.txt")
 
 	part1 := countFreshIngredients(lines)
 	fmt.Println("Part 1", part1) // 733
+
+	part2 := countFreshIngredientsRanges(lines)
+	fmt.Println("Part 2", part2) // 345821388687084
 }
