@@ -1,6 +1,8 @@
 package day6
 
 import (
+	"advent-of-code/helpers"
+	"fmt"
 	"log"
 	"slices"
 	"strconv"
@@ -68,4 +70,9 @@ func calcGrandTotal(lines []string) int {
 	return total
 }
 
-func Run() {}
+func Run() {
+	lines := helpers.ReadInput("2025/day6/input.txt")
+
+	part1 := calcGrandTotal(lines)
+	fmt.Println("Part 1", part1) // 4771265398012
+}
