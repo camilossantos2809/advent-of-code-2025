@@ -73,26 +73,39 @@ func calcGrandTotalPart1(lines []string) int {
 func calcGrandTotalPart2(lines []string) int {
 	var problems []Problem
 	var values []int
-	for i := len(lines[0]) - 1; i >= 0; i-- {
+	rowsCount := len(lines)
+	colsCount := len(lines[0])
+	for i := colsCount - 1; i >= 0; i-- {
 
-		if (i+1)%4 == 0 {
-			problems = append(problems, Problem{values: values, operation: string(lines[3][i+1])})
+		var isSeparator bool
+		for j := 0; j < rowsCount-1; j++ {
+			if lines[j][i] != ' ' {
+				isSeparator = false
+				break
+			}
+			if j == rowsCount-2 {
+				isSeparator = true
+			}
+		}
+
+		if isSeparator {
+			problems = append(problems, Problem{values: values, operation: string(lines[rowsCount-1][i+1])})
 			values = make([]int, 0)
 			continue
 		}
 		var builder strings.Builder
-		builder.WriteByte(lines[0][i])
-		builder.WriteByte(lines[1][i])
-		builder.WriteByte(lines[2][i])
+		for j := 0; j < rowsCount-1; j++ {
+			builder.WriteByte(lines[j][i])
+		}
 		numStr := strings.TrimSpace(builder.String())
 		num, err := strconv.Atoi(numStr)
 		if err != nil {
-			log.Fatalf("Failed to convert string %s", numStr)
+			log.Fatalf("Failed to convert string %s, index %d", numStr, i)
 		}
 		values = append(values, num)
 
 		if i == 0 {
-			problems = append(problems, Problem{values: values, operation: string(lines[3][i+1])})
+			problems = append(problems, Problem{values: values, operation: string(lines[rowsCount-1][i])})
 			values = make([]int, 0)
 		}
 	}
@@ -112,5 +125,5 @@ func Run() {
 	fmt.Println("Part 1", part1) // 4771265398012
 
 	part2 := calcGrandTotalPart2(lines)
-	fmt.Println("Part 1", part2)
+	fmt.Println("Part 1", part2) // 10695785245101
 }

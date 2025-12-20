@@ -41,18 +41,20 @@ func TestPart2(test *testing.T) {
 
 	test.Run("Deve considerar colunas com quantidades de dígitos diferentes", func(test *testing.T) {
 		lines := []string{
-			"264 421 92 23",
-			"136 212 97 54",
-			" 37 416 89 6 ",
-			"+   +   +  + ",
+			"  264 421 92 23",
+			"  136 212 97 54",
+			"   37 416 89 6 ",
+			"4  87  69 61 4 ",
+			"+ +   +   +  + ",
 		}
 		result := calcGrandTotalPart2(lines)
-		// 34 + 256 = 290
-		// 279 + 998 = 1277
-		// 126 + 211 + 424 = 761
-		// 467 + 633 + 21 = 1121
-		// 290 + 1277 + 761 + 1121 = 3449
-		expected := 3449
+		// 34 + 2564 = 2598
+		// 2791 + 9986 = 12777
+		// 1269 + 2116 + 424 = 3809
+		// 4677 + 6338 + 21 = 11036
+		// 4
+		// 2598 + 12777 + 3809 + 11036 + 4 = 30224
+		expected := 30224
 		if result != expected {
 			test.Errorf("result = %d; expected %d", result, expected)
 		}
