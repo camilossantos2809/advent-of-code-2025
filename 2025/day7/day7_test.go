@@ -22,7 +22,7 @@ func TestPart1(test *testing.T) {
 			".^.^.^.^.^...^.",
 			"...............",
 		}
-		result := countTachyonBeanSplits(lines)
+		result := countTachyonBeamSplits(lines)
 		expected := 21
 		if result != expected {
 			test.Errorf("result = %d; expected %d", result, expected)
@@ -30,8 +30,8 @@ func TestPart1(test *testing.T) {
 	})
 }
 
-func TestBeansConvergemParaMesmoSplitter(test *testing.T) {
-	test.Run("Beans de splits diferentes convergem", func(test *testing.T) {
+func TestBeamsConvergemParaMesmoSplitter(test *testing.T) {
+	test.Run("Beams de splits diferentes convergem", func(test *testing.T) {
 		lines := []string{
 			"...S...",
 			".......",
@@ -41,7 +41,7 @@ func TestBeansConvergemParaMesmoSplitter(test *testing.T) {
 			".......",
 			"...^...",
 		}
-		result := countTachyonBeanSplits(lines)
+		result := countTachyonBeamSplits(lines)
 		expected := 4
 
 		if result != expected {
@@ -70,7 +70,7 @@ func TestPart2(test *testing.T) {
 			".^.^.^.^.^...^.",
 			"...............",
 		}
-		result := countTachyonBeanTimelines(lines)
+		result := countTachyonBeamTimelines(lines)
 		expected := 40
 		if result != expected {
 			test.Errorf("result = %d; expected %d", result, expected)
