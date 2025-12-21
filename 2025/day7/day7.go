@@ -66,9 +66,43 @@ func countTachyonBeanSplits(lines []string) int {
 	return splitCount
 }
 
+func countTachyonBeanTimelines(lines []string) int {
+	counts := make(map[int]int)
+
+	startIndex := strings.Index(lines[0], startManifold)
+	counts[startIndex] = 1
+
+	for index, line := range lines {
+		if index == 0 {
+
+			continue
+		}
+		newCounts := make(map[int]int)
+		for col, count := range counts {
+			if line[col] == splitter {
+				newCounts[col-1] += count
+				newCounts[col+1] += count
+			} else {
+				newCounts[col] += count
+			}
+		}
+		counts = newCounts
+	}
+
+	var total int
+	for _, count := range counts {
+		total += count
+	}
+
+	return total
+}
+
 func Run() {
 	lines := helpers.ReadInput("2025/day7/input.txt")
 
 	part1 := countTachyonBeanSplits(lines)
 	fmt.Println("Part 1", part1) // 1587
+
+	part2 := countTachyonBeanTimelines(lines)
+	fmt.Println("Part 2", part2) // 5748679033029
 }

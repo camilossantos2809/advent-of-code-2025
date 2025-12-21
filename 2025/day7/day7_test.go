@@ -49,3 +49,31 @@ func TestBeansConvergemParaMesmoSplitter(test *testing.T) {
 		}
 	})
 }
+
+func TestPart2(test *testing.T) {
+	test.Run("Deve retornar o valor correto para o exemplo fornecido no site", func(test *testing.T) {
+		lines := []string{
+			".......S.......",
+			"...............",
+			".......^.......",
+			"...............",
+			"......^.^......",
+			"...............",
+			".....^.^.^.....",
+			"...............",
+			"....^.^...^....",
+			"...............",
+			"...^.^...^.^...",
+			"...............",
+			"..^...^.....^..",
+			"...............",
+			".^.^.^.^.^...^.",
+			"...............",
+		}
+		result := countTachyonBeanTimelines(lines)
+		expected := 40
+		if result != expected {
+			test.Errorf("result = %d; expected %d", result, expected)
+		}
+	})
+}
