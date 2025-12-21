@@ -43,10 +43,10 @@ func countTachyonBeanSplits(lines []string) int {
 				var leftPositionOccupied bool
 				var rightPositionOccupied bool
 				for _, search := range beans {
-					if search.active && leftBean.col == search.col && leftBean.row == search.row {
+					if search.active && leftBean.col == search.col {
 						leftPositionOccupied = true
 					}
-					if search.active && rightBean.col == search.col && rightBean.row == search.row {
+					if search.active && rightBean.col == search.col {
 						rightPositionOccupied = true
 					}
 				}
@@ -70,5 +70,5 @@ func Run() {
 	lines := helpers.ReadInput("2025/day7/input.txt")
 
 	part1 := countTachyonBeanSplits(lines)
-	fmt.Println("Part 1", part1) // 1739 too high
+	fmt.Println("Part 1", part1) // 1587
 }
