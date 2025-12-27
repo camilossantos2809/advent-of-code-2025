@@ -26,7 +26,7 @@ func TestPart1(test *testing.T) {
 			"984,92,344",
 			"425,690,689",
 		}
-		result := multiply3LargestCircuits(lines)
+		result := multiply3LargestCircuits(lines, 10)
 		expected := 40 // 5 * 4 * 2
 		if result != expected {
 			test.Errorf("result = %d; expected %d", result, expected)

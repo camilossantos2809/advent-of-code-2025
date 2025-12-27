@@ -46,7 +46,44 @@ func (c *Connection) newConnection(firstPoint, secondPoint Point, firstI, second
 	c.distance = dx*dx + dy*dy + dz*dz
 }
 
-func multiply3LargestCircuits(lines []string) int {
+type UnionFind struct {
+	parents []int
+	sizes   []int
+}
+
+func (u *UnionFind) init(length int) {
+	if len(u.parents) == 0 {
+		u.parents = make([]int, length)
+	}
+	if len(u.sizes) == 0 {
+		u.sizes = make([]int, length)
+	}
+	for i := 0; i < length; i++ {
+		u.parents[i] = i
+		u.sizes[i] = 1
+	}
+}
+
+func (u *UnionFind) find(index int) int {
+	for u.parents[index] != index {
+		index = u.parents[index]
+	}
+	return index
+}
+
+func (u *UnionFind) union(first, second int) {
+	firstRoot := u.find(first)
+	secondRoot := u.find(second)
+
+	if firstRoot == secondRoot {
+		return
+	}
+
+	u.parents[secondRoot] = firstRoot
+	u.sizes[firstRoot] += u.sizes[secondRoot]
+}
+
+func multiply3LargestCircuits(lines []string, limit int) int {
 	var points []Point
 	for _, line := range lines {
 		split := strings.Split(line, ",")
@@ -67,12 +104,45 @@ func multiply3LargestCircuits(lines []string) int {
 		return a.distance - b.distance
 	})
 
-	return len(connections)
+	firstConn := connections[:limit]
+	union := UnionFind{}
+	union.init(len(points))
+	for _, connection := range firstConn {
+		union.union(connection.firstPoint, connection.secondPoint)
+	}
+
+	var circuitSizes []int
+	for i, parent := range union.parents {
+		if parent == i {
+			circuitSizes = append(circuitSizes, union.sizes[i])
+		}
+	}
+	slices.SortFunc(circuitSizes, func(a, b int) int {
+		return b - a
+	})
+
+	var latest int
+	var largest []int
+	result := 1
+	for _, circuit := range circuitSizes {
+		if circuit == latest {
+			continue
+		}
+		largest = append(largest, circuit)
+		latest = circuit
+		result *= circuit
+
+		if len(largest) == 3 {
+			break
+		}
+	}
+
+	return result
 }
 
 func Run() {
 	lines := helpers.ReadInput("2025/day8/input.txt")
 
-	part1 := multiply3LargestCircuits(lines)
-	fmt.Println("Part 1", part1)
+	part1 := multiply3LargestCircuits(lines, 1000)
+	fmt.Println("Part 1", part1) // 97384
 }
