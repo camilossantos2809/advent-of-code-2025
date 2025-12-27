@@ -4,6 +4,7 @@ import (
 	"advent-of-code/helpers"
 	"fmt"
 	"log"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -61,8 +62,10 @@ func multiply3LargestCircuits(lines []string) int {
 			connection.newConnection(parentPoint, points[j], i, j)
 			connections = append(connections, connection)
 		}
-
 	}
+	slices.SortFunc(connections, func(a, b Connection) int {
+		return a.distance - b.distance
+	})
 
 	return len(connections)
 }
