@@ -83,6 +83,35 @@ func (u *UnionFind) union(first, second int) {
 	u.sizes[firstRoot] += u.sizes[secondRoot]
 }
 
+func (u *UnionFind) multiply3Largest() int {
+	var circuitSizes []int
+	for i, parent := range u.parents {
+		if parent == i {
+			circuitSizes = append(circuitSizes, u.sizes[i])
+		}
+	}
+	slices.SortFunc(circuitSizes, func(a, b int) int {
+		return b - a
+	})
+
+	var latest int
+	var largest []int
+	result := 1
+	for _, circuit := range circuitSizes {
+		if circuit == latest {
+			continue
+		}
+		largest = append(largest, circuit)
+		latest = circuit
+		result *= circuit
+
+		if len(largest) == 3 {
+			break
+		}
+	}
+	return result
+}
+
 func multiply3LargestCircuits(lines []string, limit int) int {
 	var points []Point
 	for _, line := range lines {
@@ -111,33 +140,7 @@ func multiply3LargestCircuits(lines []string, limit int) int {
 		union.union(connection.firstPoint, connection.secondPoint)
 	}
 
-	var circuitSizes []int
-	for i, parent := range union.parents {
-		if parent == i {
-			circuitSizes = append(circuitSizes, union.sizes[i])
-		}
-	}
-	slices.SortFunc(circuitSizes, func(a, b int) int {
-		return b - a
-	})
-
-	var latest int
-	var largest []int
-	result := 1
-	for _, circuit := range circuitSizes {
-		if circuit == latest {
-			continue
-		}
-		largest = append(largest, circuit)
-		latest = circuit
-		result *= circuit
-
-		if len(largest) == 3 {
-			break
-		}
-	}
-
-	return result
+	return union.multiply3Largest()
 }
 
 func Run() {
